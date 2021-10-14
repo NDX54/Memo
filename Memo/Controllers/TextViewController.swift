@@ -6,9 +6,11 @@
 //
 
 import UIKit
+import RealmSwift
 
 class TextViewController: UIViewController {
     
+    var noteContents : String?
     @IBOutlet weak var textView: UITextView!
 
     override func viewDidLoad() {

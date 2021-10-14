@@ -8,29 +8,76 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Table View Controller-->
-        <scene sceneID="dXm-IY-GXu">
+        <!--Folder View Controller-->
+        <scene sceneID="k6m-Cf-9H6">
             <objects>
-                <tableViewController id="Z7e-bz-nHm" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="mbZ-hh-KtC">
+                <tableViewController id="nHR-Ar-iNX" customClass="FolderViewController" customModule="Memo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="420-ml-ESd">
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <navigationBar key="tableFooterView" contentMode="scaleToFill" id="OMy-3g-Khd">
+                        <navigationBar key="tableFooterView" contentMode="scaleToFill" id="9lV-C1-3AV">
                             <rect key="frame" x="0.0" y="111" width="428" height="44"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
                             <items>
-                                <navigationItem title="Title" id="ipB-xJ-YTw">
-                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="fpg-ZA-IVW">
+                                <navigationItem title="Title" id="1TY-E7-CX5">
+                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="STg-0Z-tTb">
                                         <connections>
-                                            <segue destination="BYZ-38-t0r" kind="show" id="HDA-ul-4g8"/>
+                                            <action selector="addButtonPressed:" destination="nHR-Ar-iNX" id="16O-V6-bzU"/>
                                         </connections>
                                     </barButtonItem>
                                 </navigationItem>
                             </items>
                         </navigationBar>
                         <prototypes>
-                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="R98-Qn-84A">
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="folderCellIdentifier" id="ots-8z-NQL">
+                                <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="43.666667938232422"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="ots-8z-NQL" id="BgV-dW-dJH">
+                                    <rect key="frame" x="0.0" y="0.0" width="428" height="43.666667938232422"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="nHR-Ar-iNX" id="ynP-JS-iqA"/>
+                            <outlet property="delegate" destination="nHR-Ar-iNX" id="VzE-KS-xRa"/>
+                        </connections>
+                    </tableView>
+                    <navigationItem key="navigationItem" id="ABc-uB-xrP">
+                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="EC4-Vi-aft"/>
+                    </navigationItem>
+                    <connections>
+                        <segue destination="Z7e-bz-nHm" kind="show" identifier="goInsideSelectedFolder" id="Fv8-26-PKL"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="KPA-oK-t0M" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="108" y="98"/>
+        </scene>
+        <!--Note Items View Controller-->
+        <scene sceneID="dXm-IY-GXu">
+            <objects>
+                <tableViewController id="Z7e-bz-nHm" customClass="NoteItemsViewController" customModule="Memo" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" id="mbZ-hh-KtC">
+                        <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <navigationBar key="tableFooterView" contentMode="scaleToFill" id="mba-Br-0oX">
+                            <rect key="frame" x="0.0" y="111" width="428" height="44"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <items>
+                                <navigationItem title="Title" id="uon-QI-vi3">
+                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="jNe-bh-oiI">
+                                        <connections>
+                                            <action selector="addButtonPressed:" destination="Z7e-bz-nHm" id="ohj-4q-smk"/>
+                                        </connections>
+                                    </barButtonItem>
+                                </navigationItem>
+                            </items>
+                        </navigationBar>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="itemCellIdentifier" id="R98-Qn-84A">
                                 <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="43.666667938232422"/>
                                 <autoresizingMask key="autoresizingMask"/>
                                 <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="R98-Qn-84A" id="YY6-UD-ZI8">
@@ -47,6 +94,9 @@
                     <navigationItem key="navigationItem" id="9Gz-R7-Cmk">
                         <barButtonItem key="rightBarButtonItem" systemItem="edit" id="d1d-wP-2Ba"/>
                     </navigationItem>
+                    <connections>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="goToTextEdit" id="zZJ-nV-BOk"/>
+                    </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mke-Et-iPm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
@@ -61,7 +111,7 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="dSb-0U-spG">
-                                <rect key="frame" x="0.0" y="91" width="428" height="835"/>
+                                <rect key="frame" x="0.0" y="88" width="428" height="838"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                                 <color key="textColor" systemColor="labelColor"/>
@@ -79,7 +129,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1667" y="98"/>
+            <point key="canvasLocation" x="1666.8224299065419" y="97.840172786177106"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="hRU-hk-p9D">
@@ -93,12 +143,12 @@
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
-                        <segue destination="Z7e-bz-nHm" kind="relationship" relationship="rootViewController" id="add-rn-Nz1"/>
+                        <segue destination="nHR-Ar-iNX" kind="relationship" relationship="rootViewController" id="oMq-hh-qIN"/>
                     </connections>
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="ZWX-bF-WhJ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="113.55140186915887" y="97.840172786177106"/>
+            <point key="canvasLocation" x="-704" y="98"/>
         </scene>
     </scenes>
     <resources>
