@@ -32,8 +32,7 @@ class NoteItemsViewController: UITableViewController {
             fatalError("Navigation bar does not exist")
         }
 
-        title = folderName
-        
+        title = folderName        
     }
     
     // MARK: - Data Manipulation Methods
@@ -89,6 +88,10 @@ class NoteItemsViewController: UITableViewController {
             return cell
         }
         
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        return true
     }
     
     // MARK: - Navigation

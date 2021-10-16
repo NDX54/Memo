@@ -30,12 +30,21 @@ class TextViewController: UIViewController {
         } else {
             loadNote()
         }
+        
+        noteTextView.isScrollEnabled = true
+        
+        noteTextView.dataDetectorTypes = .all
+        noteTextView.autocapitalizationType = .none
+        
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        
-        
+//    override func viewDidAppear(_ animated: Bool) {
+//        super.viewDidAppear(animated)
+//
+//    }
+    
+    override func viewDidLayoutSubviews() {
+        noteTextView.setContentOffset(CGPoint(x: 0, y: 0), animated: false)
     }
     
     @IBAction func doneButtonPressed(_ sender: UIBarButtonItem) {
@@ -83,8 +92,7 @@ extension TextViewController: UITextViewDelegate {
     
     func textView(_ textView: UITextView, shouldChangeTextIn range: NSRange, replacementText text: String) -> Bool {
         if (text == "\n") {
-            
-            
+            textViewDidEndEditing(textView)
         }
         
         return true

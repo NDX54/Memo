@@ -10,6 +10,7 @@ import Foundation
 struct K {
     static let itemCellIdentifier = "itemCellIdentifier"
     static let folderCellIdentifier = "folderCellIdentifier"
+    static let cellIdentifier = "Cell"
     
     struct Segues {
         static let goToTextEditView = "goToTextEditView"

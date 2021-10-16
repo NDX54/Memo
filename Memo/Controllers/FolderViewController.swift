@@ -31,6 +31,7 @@ class FolderViewController: UITableViewController {
             fatalError("Navigation bar does not exist")
         }
         navBar.prefersLargeTitles = true
+        navBar.backgroundColor = .systemMint
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -97,6 +98,24 @@ class FolderViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
+    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
+        
+        let trashAction = UIContextualAction(style: .normal, title: "Trash") { (uiContAct, view, success) in
+            success(true)
+        }
+        trashAction.backgroundColor = .red
+        
+        let editAction = UIContextualAction(style: .normal, title: "Edit") { (uiContAct, view, success) in
+            
+            success(true)
+        }
+        
+        editAction.backgroundColor = .blue
+        
+        let swipeConfig = UISwipeActionsConfiguration(actions: [trashAction, editAction])
+        
+        return swipeConfig
+    }
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
@@ -138,7 +157,7 @@ class FolderViewController: UITableViewController {
                     
                 }
             } else {
-                guard let newName = textField.text else { fatalError("Error while acquiring text from text field.") }
+                guard let newName = textField.text else { fatalError("Error while acquiring text from text field. ") }
                 
                 save(withNewFolderName: newName)
             }
