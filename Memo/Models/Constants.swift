@@ -12,7 +12,13 @@ struct K {
     static let folderCellIdentifier = "folderCellIdentifier"
     
     struct Segues {
-        static let goToTextEdit = "goToTextEdit"
+        static let goToTextEditView = "goToTextEditView"
         static let goInsideSelectedFolder = "goInsideSelectedFolder"
+    }
+    
+    struct Persistence {
+        static let noteItems = "noteItems"
+        static let textContent = "textContent"
+        
     }
 }

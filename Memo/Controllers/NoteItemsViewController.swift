@@ -10,85 +10,93 @@ import RealmSwift
 
 class NoteItemsViewController: UITableViewController {
     
-    private var items = [NoteItem]()
-    private var selectedFolder : Folder? {
+    private let realm = try! Realm()
+    var noteItems : Results<NoteItem>?
+    var selectedFolder : Folder? {
         didSet {
-            
+            loadNotes()
         }
     }
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
-
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        guard let folderName = selectedFolder?.title else {
+            fatalError("Unable to find selected folder")
+        }
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation bar does not exist")
+        }
 
+        title = folderName
+        
+    }
+    
+    // MARK: - Data Manipulation Methods
+    
+    func save(withNoteName noteName: String) {
+        
+        if let currentFolder = selectedFolder {
+            do {
+                try realm.write {
+                    let newNoteItem = NoteItem()
+                    newNoteItem.title = noteName
+                    newNoteItem.id = UUID()
+                    newNoteItem.dateCreated = Date()
+                    currentFolder.noteItems.append(newNoteItem)
+                }
+            } catch {
+                print("Error saving note: \(error)")
+            }
+        }
+        
+        tableView.reloadData()
+    }
+    
+    func loadNotes() {
+        noteItems = selectedFolder?.noteItems.sorted(byKeyPath: "title", ascending: true)
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - Table view data source
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return items.count
+        return noteItems?.count ?? 1
     }
-
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: K.itemCellIdentifier, for: indexPath)
         var contentConfig = cell.defaultContentConfiguration()
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
-
         
-        contentConfig.text = items[indexPath.row].title
-        cell.contentConfiguration = contentConfig
-        cell.backgroundConfiguration = backgroundConfig
+        if let noteItems = noteItems?[indexPath.row] {
+            contentConfig.text = noteItems.title
+            cell.contentConfiguration = contentConfig
+            cell.backgroundConfiguration = backgroundConfig
 
-        return cell
+            return cell
+        } else {
+            contentConfig.text = "No notes added yet"
+            cell.contentConfiguration = contentConfig
+            cell.backgroundConfiguration = backgroundConfig
+
+            return cell
+        }
+        
     }
-
-    /*
-    // Override to support conditional editing of the table view.
-    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the specified item to be editable.
-        return true
-    }
-    */
-
-    /*
-    // Override to support editing the table view.
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCell.EditingStyle, forRowAt indexPath: IndexPath) {
-        if editingStyle == .delete {
-            // Delete the row from the data source
-            tableView.deleteRows(at: [indexPath], with: .fade)
-        } else if editingStyle == .insert {
-            // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-        }    
-    }
-    */
-
-    /*
-    // Override to support rearranging the table view.
-    override func tableView(_ tableView: UITableView, moveRowAt fromIndexPath: IndexPath, to: IndexPath) {
-
-    }
-    */
-
-    /*
-    // Override to support conditional rearranging of the table view.
-    override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
-        // Return false if you do not want the item to be re-orderable.
-        return true
-    }
-    */
-
     
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
-        performSegue(withIdentifier: K.Segues.goToTextEdit, sender: self)
+        performSegue(withIdentifier: K.Segues.goToTextEditView, sender: self)
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -98,10 +106,11 @@ class NoteItemsViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         
-        if segue.identifier == K.Segues.goToTextEdit {
+        if segue.identifier == K.Segues.goToTextEditView {
             let destVC = segue.destination as! TextViewController
-            if let indexPath = tableView.indexPathForSelectedRow {
-                
+            if let indexPath = tableView.indexPathForSelectedRow, let uniqueID = noteItems?[indexPath.row].id {
+                destVC.selectedNotes = noteItems?[indexPath.row]
+                destVC.uniqueID = uniqueID
             }
         }
     }
@@ -134,16 +143,10 @@ class NoteItemsViewController: UITableViewController {
                     
                 }
             } else {
-                guard let text = textField.text else { fatalError("Error while acquiring text from text field.") }
+                guard let noteTitle = textField.text else { fatalError("Error while acquiring text from text field.") }
                 
-                let newItem = NoteItem()
-                newItem.title = text
+                save(withNoteName: noteTitle)
                 
-                items.append(newItem)
-                
-                DispatchQueue.main.async {
-                    tableView.reloadData()
-                }
             }
         }
         

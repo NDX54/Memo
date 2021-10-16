@@ -16,19 +16,6 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <navigationBar key="tableFooterView" contentMode="scaleToFill" id="9lV-C1-3AV">
-                            <rect key="frame" x="0.0" y="111" width="428" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
-                            <items>
-                                <navigationItem title="Title" id="1TY-E7-CX5">
-                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="STg-0Z-tTb">
-                                        <connections>
-                                            <action selector="addButtonPressed:" destination="nHR-Ar-iNX" id="16O-V6-bzU"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </navigationItem>
-                            </items>
-                        </navigationBar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="folderCellIdentifier" id="ots-8z-NQL">
                                 <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="43.666667938232422"/>
@@ -45,7 +32,11 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="ABc-uB-xrP">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="EC4-Vi-aft"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="EC4-Vi-aft">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="nHR-Ar-iNX" id="GoQ-W0-FP5"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <segue destination="Z7e-bz-nHm" kind="show" identifier="goInsideSelectedFolder" id="Fv8-26-PKL"/>
@@ -63,19 +54,13 @@
                         <rect key="frame" x="0.0" y="0.0" width="428" height="926"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
-                        <navigationBar key="tableFooterView" contentMode="scaleToFill" id="mba-Br-0oX">
+                        <toolbar key="tableFooterView" opaque="NO" clearsContextBeforeDrawing="NO" contentMode="bottom" id="KbB-oC-R5U">
                             <rect key="frame" x="0.0" y="111" width="428" height="44"/>
-                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMaxY="YES"/>
+                            <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
                             <items>
-                                <navigationItem title="Title" id="uon-QI-vi3">
-                                    <barButtonItem key="rightBarButtonItem" systemItem="add" id="jNe-bh-oiI">
-                                        <connections>
-                                            <action selector="addButtonPressed:" destination="Z7e-bz-nHm" id="ohj-4q-smk"/>
-                                        </connections>
-                                    </barButtonItem>
-                                </navigationItem>
+                                <barButtonItem systemItem="edit" id="QC3-VG-AvG"/>
                             </items>
-                        </navigationBar>
+                        </toolbar>
                         <prototypes>
                             <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="itemCellIdentifier" id="R98-Qn-84A">
                                 <rect key="frame" x="0.0" y="44.666666030883789" width="428" height="43.666667938232422"/>
@@ -92,10 +77,14 @@
                         </connections>
                     </tableView>
                     <navigationItem key="navigationItem" id="9Gz-R7-Cmk">
-                        <barButtonItem key="rightBarButtonItem" systemItem="edit" id="d1d-wP-2Ba"/>
+                        <barButtonItem key="rightBarButtonItem" systemItem="add" id="d1d-wP-2Ba">
+                            <connections>
+                                <action selector="addButtonPressed:" destination="Z7e-bz-nHm" id="29M-Yq-jhi"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
-                        <segue destination="BYZ-38-t0r" kind="show" identifier="goToTextEdit" id="zZJ-nV-BOk"/>
+                        <segue destination="BYZ-38-t0r" kind="show" identifier="goToTextEditView" id="zZJ-nV-BOk"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="mke-Et-iPm" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -122,9 +111,15 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="225-ga-Edk"/>
+                    <navigationItem key="navigationItem" id="225-ga-Edk">
+                        <barButtonItem key="rightBarButtonItem" title="Done" style="done" id="bAQ-9A-enX">
+                            <connections>
+                                <action selector="doneButtonPressed:" destination="BYZ-38-t0r" id="oih-OG-v2B"/>
+                            </connections>
+                        </barButtonItem>
+                    </navigationItem>
                     <connections>
-                        <outlet property="textView" destination="dSb-0U-spG" id="LHb-nJ-vLq"/>
+                        <outlet property="noteTextView" destination="dSb-0U-spG" id="LHb-nJ-vLq"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>

@@ -10,33 +10,42 @@ import RealmSwift
 
 class FolderViewController: UITableViewController {
     
-    private var foldersList = [Folder]()
+    var folders : Results<Folder>?
     private let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-//        let folder1 = Folder()
-//        folder1.title = "Financial"
-//        foldersList.append(folder1)
-//        
-//        let folder2 = Folder()
-//        folder2.title = "Home"
-//        foldersList.append(folder2)
-        // Uncomment the following line to preserve selection between presentations
-        // self.clearsSelectionOnViewWillAppear = false
+        navigationItem.title = "Folders"
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation bar does not exist")
+        }
+        navBar.prefersLargeTitles = true
         
-        // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-        // self.navigationItem.rightBarButtonItem = self.editButtonItem
+        loadFolders()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        guard let navBar = navigationController?.navigationBar else {
+            fatalError("Navigation bar does not exist")
+        }
+        navBar.prefersLargeTitles = true
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+
+    }
     // MARK: - Data Manipulation Methods
     
-    func save(withNewFolderName folderName: String) {
+    private func save(withNewFolderName folderName: String) {
         do {
             try realm.write {
                 let newFolder = Folder()
                 newFolder.title = folderName
+                newFolder.uid = UUID()
+                newFolder.dateCreated = Date()
                 realm.add(newFolder)
             }
         } catch {
@@ -46,11 +55,18 @@ class FolderViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    private func loadFolders() {
+        
+        folders = realm.objects(Folder.self)
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return foldersList.count
+        return folders?.count ?? 1
     }
     
     
@@ -59,12 +75,17 @@ class FolderViewController: UITableViewController {
         var contentConfig = cell.defaultContentConfiguration()
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
         
-        
-        contentConfig.text = foldersList[indexPath.row].title
-        cell.contentConfiguration = contentConfig
-        cell.backgroundConfiguration = backgroundConfig
-        
-        return cell
+        if let folders = folders?[indexPath.row] {
+            contentConfig.text = folders.title
+            cell.contentConfiguration = contentConfig
+            cell.backgroundConfiguration = backgroundConfig
+            return cell
+        } else {
+            contentConfig.text = "No folders added yet."
+            cell.contentConfiguration = contentConfig
+            cell.backgroundConfiguration = backgroundConfig
+            return cell
+        }
     }
     
     // MARK: - Table View Delegate Methods
@@ -83,9 +104,9 @@ class FolderViewController: UITableViewController {
         // Get the new view controller using segue.destination.
         // Pass the selected object to the new view controller.
         if segue.identifier == K.Segues.goInsideSelectedFolder {
-            let destVC = segue.destination as! TextViewController
+            let destVC = segue.destination as! NoteItemsViewController
             if let indexPath = tableView.indexPathForSelectedRow {
-                
+                destVC.selectedFolder = folders?[indexPath.row]
             }
         }
         

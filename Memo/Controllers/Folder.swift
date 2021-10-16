@@ -10,6 +10,8 @@ import RealmSwift
 
 class Folder: Object {
     @objc dynamic var title : String = ""
+    @objc dynamic var uid : UUID?
+    @objc dynamic var dateCreated : Date = Date()
     
     let noteItems = List<NoteItem>()
     
