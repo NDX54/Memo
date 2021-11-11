@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class FolderViewController: UITableViewController {
+class FolderViewController: SwipeTableViewController {
     
     var folders : Results<Folder>?
     private let realm = try! Realm()
@@ -42,6 +42,7 @@ class FolderViewController: UITableViewController {
     
     private func save(withNewFolderName folderName: String) {
         do {
+            
             try realm.write {
                 let newFolder = Folder()
                 newFolder.title = folderName
@@ -63,6 +64,74 @@ class FolderViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    override func editModel(at indexPath: IndexPath) {
+        super.editModel(at: indexPath)
+        
+        let textField = UITextField()
+        
+        let editAlert = UIAlertController(title: "Edit Folder", message: "Enter the new name for the folder", preferredStyle: .alert)
+        
+        let editAction = UIAlertAction(title: "Edit", style: .default) { [self] edAct in
+                if textField.text == "" {
+                    DispatchQueue.main.async {
+                        let noTxtAlert = UIAlertController(title: "Error", message: "Field cannot be left blank.", preferredStyle: .alert)
+                        
+                        let okAction = UIAlertAction(title: "OK", style: .default) { ok in
+                            present(editAlert, animated: true, completion: nil)
+                        }
+                        
+                        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+                        
+                        noTxtAlert.addAction(okAction)
+                        noTxtAlert.addAction(cancel)
+                        present(noTxtAlert, animated: true, completion: nil)
+                    }
+                } else {
+                    if let folderForEditing = folders?[indexPath.row] {
+                        do {
+                            try realm.write {
+                                guard let textFieldText = textField.text else { return }
+                                folderForEditing.title = textFieldText
+                            }
+                            DispatchQueue.main.async {
+                                tableView.reloadData()
+                            }
+                        } catch {
+                            print("Error editing folder: \(error)")
+                        }
+                    }
+                }
+            
+        }
+        
+        let cancel = UIAlertAction(title: "Cancel", style: .cancel, handler: nil)
+        
+        editAlert.addTextField { editTxtField in
+            editTxtField.placeholder = "Edit folder name..."
+            textField.text = editTxtField.text
+        }
+        editAlert.addAction(editAction)
+        editAlert.addAction(cancel)
+        present(editAlert, animated: true, completion: nil)
+        
+    }
+    
+    override func deleteModel(at indexPath: IndexPath) {
+        super.deleteModel(at: indexPath)
+        
+        if let folderForDeletion = folders?[indexPath.row] {
+            do {
+                try realm.write {
+                    realm.delete(folderForDeletion)
+                }
+            } catch {
+                print("Error deleting folder: \(error)")
+            }
+        }
+        
+        tableView.reloadData()
+    }
+    
     // MARK: - Table view data source
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -72,7 +141,7 @@ class FolderViewController: UITableViewController {
     
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "folderCellIdentifier", for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         var contentConfig = cell.defaultContentConfiguration()
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
         
@@ -98,24 +167,6 @@ class FolderViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
-    override func tableView(_ tableView: UITableView, trailingSwipeActionsConfigurationForRowAt indexPath: IndexPath) -> UISwipeActionsConfiguration? {
-        
-        let trashAction = UIContextualAction(style: .normal, title: "Trash") { (uiContAct, view, success) in
-            success(true)
-        }
-        trashAction.backgroundColor = .red
-        
-        let editAction = UIContextualAction(style: .normal, title: "Edit") { (uiContAct, view, success) in
-            
-            success(true)
-        }
-        
-        editAction.backgroundColor = .blue
-        
-        let swipeConfig = UISwipeActionsConfiguration(actions: [trashAction, editAction])
-        
-        return swipeConfig
-    }
     // MARK: - Navigation
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation

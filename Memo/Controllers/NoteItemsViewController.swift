@@ -8,7 +8,7 @@
 import UIKit
 import RealmSwift
 
-class NoteItemsViewController: UITableViewController {
+class NoteItemsViewController: SwipeTableViewController {
     
     private let realm = try! Realm()
     var noteItems : Results<NoteItem>?
@@ -70,7 +70,7 @@ class NoteItemsViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: K.itemCellIdentifier, for: indexPath)
+        let cell = super.tableView(tableView, cellForRowAt: indexPath)
         var contentConfig = cell.defaultContentConfiguration()
         var backgroundConfig = UIBackgroundConfiguration.listPlainCell()
         
